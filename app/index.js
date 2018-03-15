@@ -12,8 +12,7 @@ const ENV = process.env.NODE_ENV || config.env;
 app.set( "env", ENV );
 
 require( "./models/user" );
-// add all models that are used in the app. Use require as below:
-// require( path to model )
+
 
 app.use( ( req, res, next ) => {
     res.header( "Access-Control-Allow-Origin", "*" );
@@ -37,7 +36,6 @@ app.use( ( err, req, res, next ) => {
     next( err );
 } );
 
-// Don't remove next !!!!
 app.use( ( err, req, res, next ) => { // eslint-disable-line no-unused-vars
     res.status( 503 ).json( {
         success: false,
