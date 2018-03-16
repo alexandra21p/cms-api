@@ -6,6 +6,7 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema( {
     id: { type: String, required: true },
+    provider: { type: String, enum: [ "google", "facebook", "" ] },
     username: { type: String, required: true },
     password: { type: String, required: true },
     email: { type: String, required: true },
