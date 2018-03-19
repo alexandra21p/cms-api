@@ -15,7 +15,13 @@ facebookStrategy();
 
 router.post(
     "/users/auth/facebook",
-    passport.authenticate( "facebook-token", { session: false }, assignToken ),
+    passport.authenticate( "facebook-token", ( error, user ) => {
+        if ( error ) {
+            console.log( error );
+        } else {
+            console.log( user );
+        }
+    } ), assignToken,
     usersController.socialLogin,
 );
 
