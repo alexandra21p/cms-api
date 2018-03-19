@@ -23,6 +23,15 @@ const register = async ( req, res ) => {
     }
 };
 
+const socialLogin = ( req, res ) => {
+    const { user, token } = req;
+    return res.json( {
+        success: true,
+        token,
+        user,
+    } );
+};
+
 const login = ( req, res ) => {
     const { user } = req;
 
@@ -78,4 +87,5 @@ module.exports = {
     login,
     edit,
     deleteUser,
+    socialLogin,
 };

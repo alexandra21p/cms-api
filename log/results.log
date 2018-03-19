@@ -1,0 +1,30 @@
+{"level":"info","message":"Info message","timestamp":"17:43:18"}
+{"level":"warn","message":"Warning message","timestamp":"17:43:18"}
+{"level":"error","message":"Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client\n    at validateHeader (_http_outgoing.js:503:11)\n    at ServerResponse.setHeader (_http_outgoing.js:510:3)\n    at ServerResponse.header (C:\\Users\\alexa_000\\Documents\\licenta\\api\\node_modules\\express\\lib\\response.js:767:10)\n    at ServerResponse.json (C:\\Users\\alexa_000\\Documents\\licenta\\api\\node_modules\\express\\lib\\response.js:264:10)\n    at ServerResponse.send (C:\\Users\\alexa_000\\Documents\\licenta\\api\\node_modules\\express\\lib\\response.js:158:21)\n    at router.post (C:\\Users\\alexa_000\\Documents\\licenta\\api\\app\\config\\routes.js:26:16)\n    at Layer.handle [as handle_request] (C:\\Users\\alexa_000\\Documents\\licenta\\api\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\Users\\alexa_000\\Documents\\licenta\\api\\node_modules\\express\\lib\\router\\route.js:137:13)\n    at complete (C:\\Users\\alexa_000\\Documents\\licenta\\api\\node_modules\\passport\\lib\\middleware\\authenticate.js:263:13)\n    at C:\\Users\\alexa_000\\Documents\\licenta\\api\\node_modules\\passport\\lib\\middleware\\authenticate.js:270:15\n    at pass (C:\\Users\\alexa_000\\Documents\\licenta\\api\\node_modules\\passport\\lib\\authenticator.js:431:14)\n    at Authenticator.transformAuthInfo (C:\\Users\\alexa_000\\Documents\\licenta\\api\\node_modules\\passport\\lib\\authenticator.js:453:5)\n    at C:\\Users\\alexa_000\\Documents\\licenta\\api\\node_modules\\passport\\lib\\middleware\\authenticate.js:267:22\n    at IncomingMessage.req.login.req.logIn (C:\\Users\\alexa_000\\Documents\\licenta\\api\\node_modules\\passport\\lib\\http\\request.js:55:13)\n    at FacebookTokenStrategy.strategy.success (C:\\Users\\alexa_000\\Documents\\licenta\\api\\node_modules\\passport\\lib\\middleware\\authenticate.js:248:13)\n    at verified (C:\\Users\\alexa_000\\Documents\\licenta\\api\\node_modules\\passport-facebook-token\\lib\\index.js:102:25)","timestamp":"17:49:45"}
+{"level":"info","message":"Info message","timestamp":"17:53:04"}
+{"level":"warn","message":"Warning message","timestamp":"17:53:04"}
+{"level":"info","message":"Info message","timestamp":"17:53:17"}
+{"level":"warn","message":"Warning message","timestamp":"17:53:17"}
+{"level":"info","message":"Info message","timestamp":"17:54:05"}
+{"level":"warn","message":"Warning message","timestamp":"17:54:05"}
+{"level":"info","message":"Info message","timestamp":"17:54:24"}
+{"level":"warn","message":"Warning message","timestamp":"17:54:24"}
+{"level":"info","message":"Info message","timestamp":"18:01:33"}
+{"level":"warn","message":"Warning message","timestamp":"18:01:33"}
+{"level":"info","message":"Info message","timestamp":"10:11:55"}
+{"level":"warn","message":"Warning message","timestamp":"10:11:55"}
+{"level":"info","message":"Info message","timestamp":"10:31:27"}
+{"level":"warn","message":"Warning message","timestamp":"10:31:27"}
+{"level":"info","message":"Info message","timestamp":"10:31:36"}
+{"level":"warn","message":"Warning message","timestamp":"10:31:36"}
+{"level":"info","message":"Info message","timestamp":"10:42:16"}
+{"level":"warn","message":"Warning message","timestamp":"10:42:16"}
+{"level":"info","message":"Info message","timestamp":"10:42:21"}
+{"level":"warn","message":"Warning message","timestamp":"10:42:21"}
+{"level":"error","message":"InternalOAuthError: Failed to fetch user profile\n    at C:\\Users\\alexa_000\\Documents\\licenta\\api\\node_modules\\passport-facebook-token\\lib\\index.js:155:32\n    at passBackControl (C:\\Users\\alexa_000\\Documents\\licenta\\api\\node_modules\\oauth\\lib\\oauth2.js:132:9)\n    at IncomingMessage.<anonymous> (C:\\Users\\alexa_000\\Documents\\licenta\\api\\node_modules\\oauth\\lib\\oauth2.js:157:7)\n    at IncomingMessage.emit (events.js:185:15)\n    at endReadableNT (_stream_readable.js:1101:12)\n    at process._tickCallback (internal/process/next_tick.js:114:19)","timestamp":"10:42:51"}
+{"level":"info","message":"Info message","timestamp":"10:47:07"}
+{"level":"warn","message":"Warning message","timestamp":"10:47:07"}
+{"level":"info","message":"Info message","timestamp":"10:47:42"}
+{"level":"warn","message":"Warning message","timestamp":"10:47:42"}
+{"level":"info","message":"Info message","timestamp":"10:48:29"}
+{"level":"warn","message":"Warning message","timestamp":"10:48:29"}

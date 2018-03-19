@@ -2,18 +2,31 @@ const usersController = require( "../controllers/usersController" );
 
 const validateToken = require( "../middlewares/validateToken" );
 const authorize = require( "../middlewares/authorize" );
+const assignToken = require( "../middlewares/assignToken" );
+const facebookStrategy = require( "./passport/facebookStrategy" );
 
 const express = require( "express" );
+const passport = require( "passport" );
 
 const router = express.Router( );
+
+// passport configuration for facebook login
+facebookStrategy();
+
+router.post(
+    "/users/auth/facebook",
+    passport.authenticate( "facebook-token", { session: false }, assignToken ),
+    usersController.socialLogin,
+);
 
 /**
 *    @apiGroup User
 *    @api {post} /users/registration Adding an user to the db.
-*    @apiParam {String} id  User ID required.
-*    @apiParam {String} name  Mandatory name.
-*    @apiParam {Number} age  Mandatory age. Minimum 18.
-*    @apiParam {String} sex  Mandatory sex.
+*    @apiParam {String} id User ID required.
+*    @apiParam {String} email Mandatory name.
+*    @apiParam {String} name Mandatory name.
+*    @apiParam {String} password Mandatory password.
+
 *    @apiExample {response} Example response:
 *       {
 *         "user": {
@@ -26,7 +39,7 @@ const router = express.Router( );
 *           }
 *      }
 */
-router.post( "/users/registration", authorize, usersController.register );
+router.post( "/users/registration", authorize, assignToken, usersController.register );
 
 /**
 *    @apiGroup User
