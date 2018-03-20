@@ -24,15 +24,9 @@ const register = async ( req, res ) => {
 };
 
 const socialLogin = ( req, res ) => {
-    console.log( "_________________________________________" );
-    console.log( "INSIDE CONTROLLER FUNCTION" );
-    console.log( "_________________________________________" );
-
     const { user, token } = req;
-    console.log( "user: ", user );
-    console.log( "token: ", token );
-    return res.json( {
-        success: true,
+
+    res.success( {
         token,
         user,
     } );

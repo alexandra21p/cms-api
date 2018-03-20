@@ -9,18 +9,8 @@ module.exports = () => {
             clientSecret: "6de56e6315d919fe0eafcd133e7b1285",
         },
         ( accessToken, refreshToken, profile, done ) => {
-            console.log( accessToken );
-            console.log( "REFRESH TOKEN: ", refreshToken );
-            console.log( "_________________________________________" );
-            console.log( "INSIDE FACEBOOK STRATEGY" );
-            console.log( "_________________________________________" );
-            User.findOne( { "providers.profileId": profile.id }, ( err, foundUser ) => {
-                if ( err ) {
-                    console.log( "ERROR FINDING USER IN DB.....", err );
-                    return done( err, foundUser );
-                }
+            User.findOne( { "providers.profileId": profile.id }, ( err, foundUser ) => { // eslint-disable-line
                 if ( !foundUser ) {
-                    console.log( "NOT FOUND, creating new user..." );
                     const user = new User();
                     user.addNewUser( "facebook", accessToken, profile );
                     user.setId();
@@ -31,9 +21,9 @@ module.exports = () => {
                         }
                         return done( error, savedUser );
                     } );
+                } else {
+                    return done( err, foundUser );
                 }
-                console.log( "FOUND" );
-                return done( err, foundUser );
             } );
         },
     ) );

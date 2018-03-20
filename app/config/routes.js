@@ -1,36 +1,80 @@
+const { InternalOAuthError } = require( "passport-oauth" );
+
 const usersController = require( "../controllers/usersController" );
 
 const validateToken = require( "../middlewares/validateToken" );
 const authorize = require( "../middlewares/authorize" );
 const assignToken = require( "../middlewares/assignToken" );
 const facebookStrategy = require( "./passport/facebookStrategy" );
+const googleStrategy = require( "./passport/googleStrategy" );
 
 const express = require( "express" );
 const passport = require( "passport" );
 
 const router = express.Router( );
 
-// passport configuration for facebook login
+// passport configuration for social login
 facebookStrategy();
+googleStrategy();
 
+/**
+*    @apiGroup User
+*    @api {post} /users/auth/facebook Authenticating an user using facebook account.
+*    @apiParam {String} access_token Access token provided by FB mandatory.
+*    @apiExample {request} Example request:
+*       {
+*         "access_token": "EAAMyCocMJasBAGd2cQlXyI5DDXfNpjAHSsTAU2WkyIAOaqsCApkMCEWwntbq4OJjFe5ZAP39Dr3O0swKZBtdJZCLfmcQIv2sM9ZABnFjpWbOqpfbZAoj7abKrZBQ8lBb9RCpwUiy5fF3CqoSElalJWv1AFgKfR7OBd7K88GMwN7jlkJ8bZCG12GZCzdr1ZBA0rxUxC1pAJ8ZBZB5gZDZD"
+*      }
+*/
 router.post(
-    "/users/auth/facebook",
-    passport.authenticate( "facebook-token", ( error, user ) => {
-        if ( error ) {
-            console.log( error );
-        } else {
-            console.log( user );
-        }
-    } ), assignToken,
+    "/users/auth/facebook", ( req, res, next ) => {
+        passport.authenticate( "facebook-token", ( error, user ) => {
+            if ( error && error instanceof InternalOAuthError ) {
+                const { data } = error.oauthError;
+                const errorReason = JSON.parse( data );
+                return res.status( 401 ).send( {
+                    error: true,
+                    message: errorReason.error.message,
+                } );
+            }
+            req.user = user;
+            return next();
+        } )( req, res, next );
+    }, assignToken,
+    usersController.socialLogin,
+);
+
+/**
+*    @apiGroup User
+*    @api {post} /users/auth/google Authenticating an user using google account.
+*    @apiParam {String} access_token Access token provided by Google mandatory.
+*    @apiExample {request} Example request:
+*       {
+*         "access_token": "ya29.GlyEBSfcQJhmfky_ktAzSg7AKd5DSvcVrZCxlCD5BO7VZ1CHjUM3DsSYKB7AVuePu7Ak8paS87NgZKGDo9kM92CT0NA-oBHyLbzL67H2a9VjkbcCxFXqa021ugTyKA"
+*      }
+*/
+router.post(
+    "/users/auth/google", ( req, res, next ) => {
+        passport.authenticate( "google-token", ( error, user ) => {
+            if ( error ) {
+                console.log( "error" );
+                return res.status( 401 ).send( {
+                    error: true,
+                    message: error,
+                } );
+            }
+            req.user = user;
+            return next();
+        } )( req, res, next );
+    }, assignToken,
     usersController.socialLogin,
 );
 
 /**
 *    @apiGroup User
 *    @api {post} /users/registration Adding an user to the db.
-*    @apiParam {String} id User ID required.
-*    @apiParam {String} email Mandatory name.
-*    @apiParam {String} name Mandatory name.
+*    @apiParam {String} email Mandatory email.
+*    @apiParam {String} displayName Mandatory name.
 *    @apiParam {String} password Mandatory password.
 
 *    @apiExample {response} Example response:
@@ -50,14 +94,11 @@ router.post( "/users/registration", authorize, assignToken, usersController.regi
 /**
 *    @apiGroup User
 *    @api {post} /users/login User login route.
-*    @apiParam {String} id  User ID required.
-*    @apiParam {String} username  User username required.
+*    @apiParam {String} email User emailrequired.
 *    @apiParam {String} password  User password required.
 *    @apiExample {response} Example response:
 *       {
-*         "user": {
-*            "token": dahljkhajfhajku32974eq9kjh
-*           }
+            "token": dahljkhajfhajku32974eq9kjh
 *      }
 */
 router.post( "/users/login", authorize, usersController.login );
