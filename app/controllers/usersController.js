@@ -1,9 +1,5 @@
-const extractObject = require( "../utilities/index" );
-const jwt = require( "jsonwebtoken" );
-const bcrypt = require( "bcrypt" );
 const usersRepository = require( "../repositories/usersRepository" );
-
-const SECRET = "superSuperSecret";
+const { extractObject } = require( "../utilities/index" );
 
 const register = async ( req, res ) => {
     const { user } = req;
@@ -13,50 +9,21 @@ const register = async ( req, res ) => {
     }
     try {
         const savedUser = await usersRepository.saveUser( req.body );
-
-        res.success( extractObject(
-            savedUser,
-            [ "id", "username" ],
-        ) );
+        res.success( extractObject( savedUser, [ "id", "email", "displayName", "providers" ] ) );
     } catch ( err ) {
         res.send( err );
     }
 };
 
-const socialLogin = ( req, res ) => {
+const login = ( req, res ) => {
     const { user, token } = req;
 
     res.success( {
         token,
-        user,
-    } );
-};
-
-const login = ( req, res ) => {
-    const { user } = req;
-
-    if ( !req.body.password ) {
-        return res.status( 400 ).send( "password required" );
-    }
-
-    const password = bcrypt.compareSync( req.body.password, user.password );
-    if ( user ) {
-        if ( !password ) {
-            return res.json( {
-                success: false,
-                message: "Authentication failed. Wrong password.",
-            } );
-        }
-
-        const token = jwt.sign( user.toObject(), SECRET, { expiresIn: 1440 } );
-        return res.json( {
-            success: true,
-            token,
-        } );
-    }
-    return res.json( {
-        success: false,
-        message: "Authentication failed. User not found.",
+        user: extractObject(
+            user,
+            [ "id", "email", "displayName", "providers", "avatar", "createdSites" ],
+        ),
     } );
 };
 
@@ -87,5 +54,4 @@ module.exports = {
     login,
     edit,
     deleteUser,
-    socialLogin,
 };

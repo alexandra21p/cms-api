@@ -1,6 +1,6 @@
 const jwt = require( "jsonwebtoken" );
 
-const SECRET = "superSuperSecret";
+const SECRET = "RexOrangeCounty";
 
 module.exports = ( req, res, next ) => {
     const { user } = req;

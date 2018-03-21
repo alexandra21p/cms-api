@@ -1,15 +1,21 @@
 const usersRepository = require( "../repositories/usersRepository" );
 
 async function authorize ( req, res, next ) {
-    const { id } = req.body;
+    const { email, provider } = req.body;
 
-    if ( !id ) {
-        res.preconditionFailed( "missing_id" );
+    if ( !email ) {
+        res.preconditionFailed( "missing_email" );
+        return;
+    }
+    if ( !provider ) {
+        res.preconditionFailed( "missing_provider" );
         return;
     }
 
     try {
-        const foundUser = await usersRepository.findUser( id );
+        const query = { $and: [ { "providers.type": provider }, { "providers.email": email } ] };
+
+        const foundUser = await usersRepository.findUser( query );
         req.user = foundUser;
         next();
     } catch ( err ) {

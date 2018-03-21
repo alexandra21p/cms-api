@@ -41,7 +41,7 @@ router.post(
             return next();
         } )( req, res, next );
     }, assignToken,
-    usersController.socialLogin,
+    usersController.login,
 );
 
 /**
@@ -67,7 +67,7 @@ router.post(
             return next();
         } )( req, res, next );
     }, assignToken,
-    usersController.socialLogin,
+    usersController.login,
 );
 
 /**
@@ -75,6 +75,7 @@ router.post(
 *    @api {post} /users/registration Adding an user to the db.
 *    @apiParam {String} email Mandatory email.
 *    @apiParam {String} displayName Mandatory name.
+*    @apiParam {String} provider Account provider type required.
 *    @apiParam {String} password Mandatory password.
 
 *    @apiExample {response} Example response:
@@ -89,19 +90,19 @@ router.post(
 *           }
 *      }
 */
-router.post( "/users/registration", authorize, assignToken, usersController.register );
+router.post( "/users/registration", authorize, usersController.register );
 
 /**
 *    @apiGroup User
 *    @api {post} /users/login User login route.
-*    @apiParam {String} email User emailrequired.
+*    @apiParam {String} email User email required.
 *    @apiParam {String} password  User password required.
 *    @apiExample {response} Example response:
 *       {
             "token": dahljkhajfhajku32974eq9kjh
 *      }
 */
-router.post( "/users/login", authorize, usersController.login );
+router.post( "/users/login", authorize, assignToken, usersController.login );
 
 /**
 *    @apiGroup User
