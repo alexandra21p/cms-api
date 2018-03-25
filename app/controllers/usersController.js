@@ -9,7 +9,7 @@ const register = async ( req, res ) => {
     }
     try {
         const savedUser = await usersRepository.saveUser( req.body );
-        res.success( extractObject( savedUser, [ "id", "email", "displayName", "providers" ] ) );
+        res.success( extractObject( savedUser, [ "id", "displayName", "providers" ] ) );
     } catch ( err ) {
         res.send( err );
     }
@@ -22,7 +22,7 @@ const login = ( req, res ) => {
         token,
         user: extractObject(
             user,
-            [ "id", "email", "displayName", "providers", "avatar", "createdSites" ],
+            [ "id", "displayName", "providers", "avatar", "createdSites" ],
         ),
     } );
 };

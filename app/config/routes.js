@@ -97,6 +97,7 @@ router.post( "/users/registration", authorize, usersController.register );
 *    @api {post} /users/login User login route.
 *    @apiParam {String} email User email required.
 *    @apiParam {String} password  User password required.
+*    @apiParam {String} provider  Account provider required local.
 *    @apiExample {response} Example response:
 *       {
             "token": dahljkhajfhajku32974eq9kjh
