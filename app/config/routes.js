@@ -5,6 +5,7 @@ const usersController = require( "../controllers/usersController" );
 const validateToken = require( "../middlewares/validateToken" );
 const authorize = require( "../middlewares/authorize" );
 const assignToken = require( "../middlewares/assignToken" );
+const checkLoginPassword = require( "../middlewares/checkLoginPassword" );
 const facebookStrategy = require( "./passport/facebookStrategy" );
 const googleStrategy = require( "./passport/googleStrategy" );
 
@@ -103,7 +104,7 @@ router.post( "/users/registration", authorize, usersController.register );
             "token": dahljkhajfhajku32974eq9kjh
 *      }
 */
-router.post( "/users/login", authorize, assignToken, usersController.login );
+router.post( "/users/login", authorize, checkLoginPassword, assignToken, usersController.login );
 
 /**
 *    @apiGroup User
