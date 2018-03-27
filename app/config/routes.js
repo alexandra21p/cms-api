@@ -128,6 +128,8 @@ router.put( "/users/edit", authorize, validateToken, usersController.edit );
 */
 router.delete( "/users/delete", authorize, validateToken, usersController.deleteUser );
 
+router.get( "/users/getProfile/:userId", validateToken, usersController.getProfile );
+
 router.get( "/test", ( req, res ) => {
     res.json( { success: true } );
 } );

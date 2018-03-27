@@ -49,9 +49,24 @@ const deleteUser = async ( req, res ) => {
     }
 };
 
+const getProfile = async ( req, res ) => {
+    const { userId } = req.params;
+    try {
+        const foundUser = await usersRepository.findUser( { id: userId } );
+        if ( !foundUser ) {
+            res.notFound();
+            return;
+        }
+        res.success( foundUser );
+    } catch ( err ) {
+        res.send( err );
+    }
+};
+
 module.exports = {
     register,
     login,
     edit,
     deleteUser,
+    getProfile,
 };
