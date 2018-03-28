@@ -6,6 +6,7 @@ const validateToken = require( "../middlewares/validateToken" );
 const authorize = require( "../middlewares/authorize" );
 const assignToken = require( "../middlewares/assignToken" );
 const checkLoginPassword = require( "../middlewares/checkLoginPassword" );
+const checkSocialAuth = require( "../middlewares/checkSocialAuth" );
 const facebookStrategy = require( "./passport/facebookStrategy" );
 const googleStrategy = require( "./passport/googleStrategy" );
 
@@ -115,7 +116,7 @@ router.post( "/users/login", authorize, checkLoginPassword, assignToken, usersCo
 *    @apiParam {Number} age  Mandatory age. Minimum 18.
 *    @apiParam {String} sex  Mandatory sex.
 */
-router.put( "/users/edit", authorize, validateToken, usersController.edit );
+router.put( "/users/edit", checkSocialAuth, authorize, validateToken, usersController.edit );
 
 /**
 *    @apiGroup User
@@ -126,13 +127,17 @@ router.put( "/users/edit", authorize, validateToken, usersController.edit );
 *           id:123456789
 *       }
 */
-router.delete( "/users/delete", authorize, validateToken, usersController.deleteUser );
+router.delete(
+    "/users/delete", checkSocialAuth, authorize,
+    validateToken, usersController.deleteUser,
+);
 
-router.get( "/users/getProfile/:userId", validateToken, usersController.getProfile );
+router.get(
+    "/users/getProfile/:provider/:profileId", checkSocialAuth, authorize,
+    validateToken, usersController.getProfile,
+);
 
-router.get( "/test", ( req, res ) => {
-    res.json( { success: true } );
-} );
+router.post( "/users/logout", checkSocialAuth, authorize, validateToken, usersController.logout );
 
 module.exports = ( app ) => {
     app.use( "/", router );

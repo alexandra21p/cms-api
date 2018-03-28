@@ -22,7 +22,13 @@ module.exports = () => {
                         return done( error, savedUser );
                     } );
                 } else {
-                    return done( err, foundUser );
+                    foundUser.updateUser( "facebook", accessToken, profile );
+                    foundUser.save( ( error, savedUser ) => {
+                        if ( error ) {
+                            console.log( "ERROR UPDATING USER IN DB...", error );
+                        }
+                        return done( error, savedUser );
+                    } );
                 }
             } );
         },

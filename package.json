@@ -23,6 +23,7 @@
   "homepage": "https://github.com/FortechRomania/node-starter#readme",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "cryptlib": "^1.0.3",
     "express": "^4.14.0",
     "express-jwt": "^5.1.0",
     "jsonwebtoken": "^7.1.9",

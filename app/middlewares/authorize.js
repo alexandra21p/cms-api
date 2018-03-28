@@ -1,19 +1,24 @@
 const usersRepository = require( "../repositories/usersRepository" );
 
-async function authorize ( req, res, next ) {
-    const { email, provider } = req.body;
+async function authorize ( req, res, next ) { // eslint-disable-line
+    const { profileId } = req.params || req.body;
+    console.log( "PROFILE ID", profileId );
+    let query;
 
-    if ( !email ) {
-        res.preconditionFailed( "missing_email" );
-        return;
-    }
-    if ( !provider ) {
-        res.preconditionFailed( "missing_provider" );
-        return;
+    if ( !profileId ) {
+        const { email } = req.body || req.params;
+        const { provider } = req.body || req.params;
+        console.log( email, provider );
+
+        if ( !email && !provider ) {
+            res.preconditionFailed( "missing_identifier" );
+            return;
+        }
+        query = { $and: [ { "providers.type": provider }, { "providers.email": email } ] };
     }
 
     try {
-        const query = { $and: [ { "providers.type": provider }, { "providers.email": email } ] };
+        query = { "providers.profileId": profileId };
 
         const foundUser = await usersRepository.findUser( query );
         req.user = foundUser;

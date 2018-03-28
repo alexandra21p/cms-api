@@ -1,5 +1,5 @@
 const usersRepository = require( "../repositories/usersRepository" );
-const { extractObject } = require( "../utilities/index" );
+const { extractObject, encryptToken } = require( "../utilities/index" );
 
 const register = async ( req, res ) => {
     const { user } = req;
@@ -17,13 +17,51 @@ const register = async ( req, res ) => {
 
 const login = ( req, res ) => {
     const { user, token } = req;
+    const { provider } = req.body;
+    const { socialAccessToken } = user;
+    const responseKeys = [ "id", "providers" ];
 
-    res.success( {
-        token,
-        user: extractObject(
-            user,
-            [ "id", "displayName", "providers", "avatar", "createdSites" ],
-        ),
+    if ( socialAccessToken ) {
+        responseKeys.push( "socialAccessToken" );
+
+        const { profileId: id } = user.providers.find( prov => prov.type === provider );
+        const reversedId = id.split( "" ).reverse().join( "" );
+        const encryptedToken = encryptToken( socialAccessToken, id, reversedId );
+
+        user.socialAccessToken = encryptedToken;
+        user.save( ( err, savedUser ) => {
+            if ( err ) {
+                res.serverError();
+                return;
+            }
+            res.success( {
+                token,
+                user: extractObject(
+                    savedUser,
+                    responseKeys,
+                ),
+            } );
+        } );
+    } else {
+        res.success( {
+            token,
+            user: extractObject(
+                user,
+                responseKeys,
+            ),
+        } );
+    }
+};
+
+const logout = ( req, res ) => {
+    const { user } = req;
+
+    user.socialAccessToken = "";
+    user.save( ( err, savedUser ) => {
+        if ( err ) {
+            return res.serverError();
+        }
+        return res.success( extractObject( savedUser, [ "socialAccessToken" ] ) );
     } );
 };
 
@@ -50,22 +88,25 @@ const deleteUser = async ( req, res ) => {
 };
 
 const getProfile = async ( req, res ) => {
-    const { userId } = req.params;
-    try {
-        const foundUser = await usersRepository.findUser( { id: userId } );
-        if ( !foundUser ) {
-            res.notFound();
-            return;
-        }
-        res.success( foundUser );
-    } catch ( err ) {
-        res.send( err );
-    }
+    const { user } = req;
+    res.success( user );
+    // const { userId } = req.params;
+    // try {
+    //     const foundUser = await usersRepository.findUser( { id: userId } );
+    //     if ( !foundUser ) {
+    //         res.notFound();
+    //         return;
+    //     }
+    //     res.success( foundUser );
+    // } catch ( err ) {
+    //     res.send( err );
+    // }
 };
 
 module.exports = {
     register,
     login,
+    logout,
     edit,
     deleteUser,
     getProfile,

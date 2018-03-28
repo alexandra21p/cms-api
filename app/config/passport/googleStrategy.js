@@ -10,8 +10,8 @@ module.exports = () => {
         },
         ( accessToken, refreshToken, profile, done ) => {
             User.findOne( { "providers.profileId": profile.id }, ( err, foundUser ) => { // eslint-disable-line
+                const { picture } = profile._json; // eslint-disable-line
                 if ( !foundUser ) {
-                    const { picture } = profile._json; // eslint-disable-line
                     const user = new User();
                     user.addNewUser( "google", accessToken, profile, picture );
                     user.setId();
@@ -23,7 +23,13 @@ module.exports = () => {
                         return done( error, savedUser );
                     } );
                 } else {
-                    return done( err, foundUser );
+                    foundUser.updateUser( "google", accessToken, profile, picture );
+                    foundUser.save( ( error, savedUser ) => {
+                        if ( error ) {
+                            console.log( "ERROR UPDATING USER IN DB...", error );
+                        }
+                        return done( error, savedUser );
+                    } );
                 }
             } );
         },
