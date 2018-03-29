@@ -2,9 +2,8 @@ const passport = require( "passport" );
 const { InternalOAuthError } = require( "passport-oauth" );
 
 module.exports = ( req, res, next ) => {
-    const { provider } = req.params || req.body;
-    console.log( req.body );
-    console.log( provider );
+    const provider = req.params.provider || req.body.provider;
+
     if ( !provider ) {
         res.preconditionFailed( "missing_provider" );
         return;
