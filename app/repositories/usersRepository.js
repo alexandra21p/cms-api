@@ -23,12 +23,22 @@ const saveUser = async ( data ) => {
 };
 
 const editUser = async ( userObject, newData ) => {
-    const { name, sex, age } = newData;
+    const {
+        name: newName, email: newEmail, avatar: newAvatar, password: newPassword,
+    } = newData;
     const user = userObject;
+    const {
+        displayName, avatar, providers, password,
+    } = user;
 
-    user.name = name;
-    user.sex = sex;
-    user.age = age;
+    const updatedProviders = providers.map( prov =>
+        ( prov === "local" ? Object.assign( {}, prov, { email: newEmail } ) : prov ) );
+    console.log( updatedProviders );
+
+    user.displayName = newName || displayName;
+    user.avatar = newAvatar || avatar;
+    user.providers = updatedProviders;
+    user.password = newPassword || password;
 
     return user.save( );
 };

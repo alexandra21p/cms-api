@@ -13,6 +13,7 @@ module.exports = ( req, res, next ) => {
         next();
         return;
     }
+
     passport.authenticate( `${ provider }-token`, ( error, user ) => {
         if ( error && error instanceof InternalOAuthError ) {
             const { data } = error.oauthError;
