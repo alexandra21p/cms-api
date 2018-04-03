@@ -109,14 +109,27 @@ router.post( "/users/login", authorize, checkLoginPassword, assignToken, usersCo
 
 /**
 *    @apiGroup User
-*    @api {put} /users/edit Edit the profile and filtering options.
+*    @api {put} /users/edit Edit the profile (email, name, avatar).
 *    @apiDescription Useful to change profile information
-*    @apiParam {String} id  User ID required.
-*    @apiParam {String} name  Mandatory name.
-*    @apiParam {Number} age  Mandatory age. Minimum 18.
-*    @apiParam {String} sex  Mandatory sex.
+*    @apiParam {String} id User ID required.
+*    @apiParam {String} provider Login provider required.
+*    @apiParam {String} name New name.
+*    @apiParam {String} email New email.
+*    @apiParam {String} avatar New profile pciture.
 */
 router.put( "/users/edit", checkSocialAuth, authorize, validateToken, usersController.edit );
+
+/**
+*    @apiGroup User
+*    @api {put} /users/editPassword Edit the password.
+*    @apiParam {String} email User email required.
+*    @apiParam {String} provider Mandatory login provider.
+*    @apiParam {String} password  Mandatory new password.
+*/
+router.put(
+    "/users/editPassword", checkSocialAuth, authorize,
+    validateToken, checkLoginPassword, usersController.updatePassword,
+);
 
 /**
 *    @apiGroup User

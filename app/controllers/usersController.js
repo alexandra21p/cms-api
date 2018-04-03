@@ -76,6 +76,18 @@ const edit = async ( req, res ) => {
     }
 };
 
+const updatePassword = async ( req, res ) => {
+    const { user } = req;
+    const { newPassword } = req.body;
+
+    try {
+        const editedUser = await usersRepository.updatePassword( user, newPassword );
+        res.success( editedUser );
+    } catch ( err ) {
+        res.send( err );
+    }
+};
+
 const deleteUser = async ( req, res ) => {
     const { user } = req;
 
@@ -99,4 +111,5 @@ module.exports = {
     edit,
     deleteUser,
     getProfile,
+    updatePassword,
 };

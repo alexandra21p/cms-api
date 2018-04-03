@@ -24,21 +24,34 @@ const saveUser = async ( data ) => {
 
 const editUser = async ( userObject, newData ) => {
     const {
-        name: newName, email: newEmail, avatar: newAvatar, password: newPassword,
+        displayName: newName, email: newEmail, avatar: newAvatar,
     } = newData;
     const user = userObject;
     const {
-        displayName, avatar, providers, password,
+        displayName, avatar, providers,
     } = user;
 
     const updatedProviders = providers.map( prov =>
-        ( prov === "local" ? Object.assign( {}, prov, { email: newEmail } ) : prov ) );
-    console.log( updatedProviders );
+        ( prov.type === "local" ? Object.assign(
+            {},
+            prov.toObject(),
+            { email: newEmail },
+        )
+            : prov.toObject() ) );
 
     user.displayName = newName || displayName;
     user.avatar = newAvatar || avatar;
     user.providers = updatedProviders;
-    user.password = newPassword || password;
+
+    return user.save( );
+};
+
+const updatePassword = async ( userObject, newPassword ) => {
+    const user = userObject;
+
+    if ( newPassword ) {
+        user.setPass( newPassword );
+    }
 
     return user.save( );
 };
@@ -50,4 +63,5 @@ module.exports = {
     saveUser,
     editUser,
     deleteUser,
+    updatePassword,
 };
