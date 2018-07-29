@@ -4,7 +4,6 @@ const SECRET = "RexOrangeCounty";
 
 function validateToken ( req, res, next ) {
     const token = req.body.token || req.headers[ "x-access-token" ];
-
     if ( !token ) {
         res.unauthorized( );
         return;
@@ -12,10 +11,7 @@ function validateToken ( req, res, next ) {
 
     jwt.verify( token, SECRET, ( err, decoded ) => {
         if ( err ) {
-            return res.json( {
-                success: false,
-                message: "Failed to authenticate token.",
-            } );
+            return res.unauthorized( );
         }
         req.decoded = decoded;
         return next( );

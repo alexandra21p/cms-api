@@ -9,7 +9,7 @@ module.exports = () => {
             clientSecret: "lvFJoTMbLp49EgmrSDxhAfW6",
         },
         ( accessToken, refreshToken, profile, done ) => {
-            User.findOne( { "providers.profileId": profile.id }, ( err, foundUser ) => { // eslint-disable-line
+            User.findOne( { "providers.profileId": profile.id }, '-__v', ( err, foundUser ) => { // eslint-disable-line
                 const { picture } = profile._json; // eslint-disable-line
                 if ( !foundUser ) {
                     const user = new User();

@@ -11,7 +11,12 @@ module.exports = ( req, res, next ) => {
         return res.status( 400 ).send( "password required" );
     }
 
-    const password = bcrypt.compareSync( requestPassword, user.password );
+    const password = bcrypt.compareSync( requestPassword, user.password, ( err ) => { // eslint-disable-line
+        if ( err ) {
+            return res.unauthorized();
+        }
+    } );
+
     if ( !password ) {
         return res.unauthorized();
     }

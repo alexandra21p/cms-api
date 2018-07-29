@@ -9,7 +9,7 @@ module.exports = () => {
             clientSecret: "6de56e6315d919fe0eafcd133e7b1285",
         },
         ( accessToken, refreshToken, profile, done ) => {
-            User.findOne( { "providers.profileId": profile.id }, ( err, foundUser ) => { // eslint-disable-line
+            User.findOne( { "providers.profileId": profile.id }, '-__v', ( err, foundUser ) => { // eslint-disable-line
                 if ( !foundUser ) {
                     const user = new User();
                     user.addNewUser( "facebook", accessToken, profile );
