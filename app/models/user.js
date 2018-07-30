@@ -1,4 +1,4 @@
-const bcrypt = require( "bcrypt" );
+const bcrypt = require( "bcryptjs" );
 const uid = require( "uid" );
 const mongoose = require( "mongoose" );
 
@@ -30,6 +30,7 @@ userSchema.methods.setId = function () {
 userSchema.methods.setPass = function( password ) {
     const saltRounds = 10;
     const hash = bcrypt.hashSync( password, saltRounds );
+    console.log( hash );
     this.password = hash;
 };
 

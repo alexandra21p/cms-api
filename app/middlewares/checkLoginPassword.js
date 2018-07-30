@@ -1,6 +1,6 @@
-const bcrypt = require( "bcrypt" );
+const bcrypt = require( "bcryptjs" );
 
-module.exports = ( req, res, next ) => {
+module.exports = async ( req, res, next ) => {
     const { user } = req;
     const { password: requestPassword } = req.body;
 
@@ -11,14 +11,14 @@ module.exports = ( req, res, next ) => {
         return res.status( 400 ).send( "password required" );
     }
 
-    const password = bcrypt.compareSync( requestPassword, user.password, ( err ) => { // eslint-disable-line
-        if ( err ) {
+    try {
+        const password = await bcrypt.compare( requestPassword, user.password );
+
+        if ( !password ) {
             return res.unauthorized();
         }
-    } );
-
-    if ( !password ) {
+        return next();
+    } catch ( err ) {
         return res.unauthorized();
     }
-    return next();
 };
