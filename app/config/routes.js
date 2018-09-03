@@ -1,6 +1,9 @@
 const { InternalOAuthError } = require( "passport-oauth" );
 
 const usersController = require( "../controllers/usersController" );
+const componentsController = require( "../controllers/componentsController" );
+const defaultsController = require( "../controllers/defaultsController" );
+const templatesController = require( "../controllers/templatesController" );
 
 const validateToken = require( "../middlewares/validateToken" );
 const authorize = require( "../middlewares/authorize" );
@@ -151,6 +154,57 @@ router.get(
 );
 
 router.post( "/users/logout", checkSocialAuth, authorize, validateToken, usersController.logout );
+
+/* COMPONENTS */
+
+/**
+*    @apiGroup Component
+*    @api {post} /components/add Adding a component to the db.
+*    @apiParam {String} parentId Mandatory id for parent component.
+*    @apiParam {String} tag Mandatory element tag.
+*    @apiParam {Object} styles Mandatory styles object.
+*    @apiParam {String} relatedTemplate Mandatory templateId.
+*    @apiExample {response} Example response:
+*      {
+*        "tag": "header",
+*        "_id": "5b87905434be1b2a81bc13ea"
+*         "styles": {
+*            "padding": "10px",
+*            "border": "1px solid black"
+*          },
+*         "relatedTemplate": "5n54b3847fuer474834g67a"
+*      }
+*/
+router.post( "/components/add", componentsController.addComponent );
+
+router.get( "/components/:id", componentsController.getComponent );
+
+router.put( "/components/:id", componentsController.editComponent );
+
+router.delete( "/components/:id", componentsController.deleteComponent );
+
+/* CUSTOM COMPONENTS */
+router.post( "/defaults/add", defaultsController.addCustom );
+
+router.get( "/defaults/:id", defaultsController.getOne );
+
+router.get( "/defaults", defaultsController.getAll );
+
+router.get( "/defaults/:type", defaultsController.getAllByType );
+
+/* TEMPLATES */
+router.post( "/templates/add", templatesController.initializeTemplate );
+
+router.get( "/templates/:id", templatesController.getTemplate );
+
+router.put( "/templates/:id", templatesController.editTemplate );
+
+router.put(
+    "/templates/:id/delete", checkSocialAuth, authorize,
+    validateToken, templatesController.deleteTemplate,
+);
+
+router.get( "/templates/:id/all", templatesController.getAllTemplatesByUser );
 
 module.exports = ( app ) => {
     app.use( "/", router );

@@ -99,9 +99,18 @@ const deleteUser = async ( req, res ) => {
     }
 };
 
-const getProfile = async ( req, res ) => {
+const getProfile = async ( req, res ) => { // eslint-disable-line
     const { user } = req;
-    res.success( user );
+    if ( !user ) {
+        return res.notFound();
+    }
+    const { profileId } = user.providers[ 0 ];
+    try {
+        const foundUser = await usersRepository.findUser( { "providers.profileId": profileId } );
+        res.success( foundUser );
+    } catch ( err ) {
+        res.send( err );
+    }
 };
 
 module.exports = {

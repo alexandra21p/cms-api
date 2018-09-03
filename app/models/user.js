@@ -1,6 +1,7 @@
 const bcrypt = require( "bcryptjs" );
 const uid = require( "uid" );
 const mongoose = require( "mongoose" );
+const Template = require( "./template" ); // eslint-disable-line
 
 const { Schema } = mongoose;
 
@@ -14,7 +15,7 @@ const userSchema = new Schema( {
             email: { type: String, required: true },
         },
     ],
-    createdSites: [ { siteID: { type: String, required: true } } ],
+    createdSites: [ { type: Schema.Types.ObjectId, ref: "Template" } ],
     displayName: { type: String },
     password: { type: String },
     avatar: { type: String, default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3NqEUNv2tWAn1Ty_tUyeowjBNGJVyOqu21mi_P0hQObF2SDmX" },
@@ -30,7 +31,6 @@ userSchema.methods.setId = function () {
 userSchema.methods.setPass = function( password ) {
     const saltRounds = 10;
     const hash = bcrypt.hashSync( password, saltRounds );
-    console.log( hash );
     this.password = hash;
 };
 
@@ -41,10 +41,23 @@ userSchema.methods.addNewUser = function( providerType, accessToken, profile, av
         email: profile.emails[ 0 ].value,
     };
 
-    this.providers.push( provider );
+    this.providers = [ ...this.providers, provider ];
     this.socialAccessToken = accessToken;
     this.avatar = avatar || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3NqEUNv2tWAn1Ty_tUyeowjBNGJVyOqu21mi_P0hQObF2SDmX";
     this.displayName = profile.displayName;
+};
+
+userSchema.methods.addSite = function( siteId ) {
+    this.createdSites = [ ...this.createdSites, siteId ];
+};
+
+userSchema.methods.removeSite = function ( siteId ) {
+    const siteIndex = this.createdSites.findIndex( site => site.toString() === siteId.toString() );
+    console.log( "THE SITE INDEX", siteIndex );
+    if ( siteIndex === -1 ) {
+        return;
+    }
+    this.createdSites.splice( siteIndex, 1 );
 };
 
 userSchema.methods.updateUser = function( providerType, accessToken, profile, avatar ) {

@@ -18,7 +18,7 @@ async function authorize ( req, res, next ) { // eslint-disable-line
     }
 
     try {
-        const foundUser = await usersRepository.findUser( query );
+        const foundUser = await usersRepository.findUser( query, false );
         req.user = foundUser;
         next();
     } catch ( err ) {

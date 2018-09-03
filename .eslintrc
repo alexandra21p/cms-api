@@ -1,3 +1,8 @@
 {
-    "extends": "fortech"
+    "extends": "fortech",
+    rules: {
+        "no-underscore-dangle": 0,
+        "no-await-in-loop": 0,
+        "complexity": 0
+    }
 }

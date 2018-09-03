@@ -2,7 +2,14 @@ const mongoose = require( "mongoose" );
 
 const User = mongoose.model( "User" );
 
-const findUser = async ( query ) => User.findOne( query );
+const findUser = async ( query, populate = true ) => {
+    if ( populate ) {
+        return User
+            .findOne( query )
+            .populate( { path: "createdSites" } );
+    } return User
+        .findOne( query );
+};
 
 const saveUser = async ( data ) => {
     const user = new User();
